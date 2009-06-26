@@ -6,7 +6,6 @@ import Test.Framework.Providers.QuickCheck2 (testProperty)
 import Test.QuickCheck
 
 import QCUtils
-import Sound.Iteratee
 import Data.Int
 import Data.Int.Int24
 import Data.Word

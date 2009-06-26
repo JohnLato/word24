@@ -21,8 +21,12 @@ extra-source-files:
 flag splitBase
   description: Use the new split-up base package.
 
-Library
- hs-Source-Dirs:
+flag buildTests
+  description: Build test executables.
+  default:     False
+
+library
+ hs-source-dirs:
    src
 
  if flag(splitBase)
@@ -40,6 +44,29 @@ Library
    Data.Word.Word24
 
  ghc-options:           -O2 -Wall
+
+executable test24
+  hs-source-dirs:
+    src
+    tests
+
+  main-is: testword24.hs
+
+  other-modules: QCUtils
+
+  if flag(buildTests)
+    build-depends:
+      QuickCheck                 >= 2 && < 3,
+      test-framework             >= 0.2 && < 0.3,
+      test-framework-quickcheck2 >= 0.2 && < 0.3
+  else
+    executable: False
+    buildable:  False
+
+  if flag(splitBase)
+    build-depends:  base >= 3 && < 5
+  else
+    build-depends:  base < 3
 
 source-repository head
   type:     darcs
