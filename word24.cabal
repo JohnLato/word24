@@ -1,31 +1,46 @@
-Name:		word24
-Version:        0.1.0
-Cabal-Version:  >= 1.2
-Description:	24-bit Word and Int data types.
-License:	BSD3
-License-file:	LICENSE
-Author:		John W. Lato, jwlato@gmail.com
-Maintainer:	John W. Lato, jwlato@gmail.com
-homepage:       http://inmachina.net/~jwlato/haskell/word24
-Stability:	experimental
+name:		word24
+version:        0.1.0
 synopsis:       24-bit word and int types for GHC
+description:	24-bit Word and Int data types.
 category:       Data
-build-type:     Simple
-cabal-version:  >= 1.2
+author:		John W. Lato, jwlato@gmail.com
+maintainer:	John W. Lato, jwlato@gmail.com
+license:	BSD3
+license-file:	LICENSE
+homepage:       http://inmachina.net/~jwlato/haskell/word24
 tested-with:    GHC == 6.10.3
-extra-source-files: README, LICENSE
+stability:	experimental
+
+cabal-version:  >= 1.2
+build-type:     Simple
+
+extra-source-files:
+  README
+  LICENSE
 
 flag splitBase
-  description: Choose the new split-up base package.
+  description: Use the new split-up base package.
 
 Library
- Hs-Source-Dirs:        src
- ghc-options:           -O2 -Wall
- if flag(splitBase)
-   build-depends:       base >= 3, base < 5
- else
-   build-depends:       base < 3
- build-depends:         haskell98
- exposed-modules:       Data.Int.Int24
-                        Data.Word.Word24
+ hs-Source-Dirs:
+   src
 
+ if flag(splitBase)
+   build-depends:
+     base >= 3 && < 5
+ else
+   build-depends:
+     base < 3
+
+ build-depends:
+   haskell98
+
+ exposed-modules:
+   Data.Int.Int24
+   Data.Word.Word24
+
+ ghc-options:           -O2 -Wall
+
+source-repository head
+  type:     darcs
+  location: http://inmachina.net/~jwlato/haskell/word24
