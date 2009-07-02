@@ -135,7 +135,7 @@ instance Bits Int24 where
     (I24# x#) `shift` (I# i#)
         | i# >=# 0#            = I24# (narrow24Int# (x# `iShiftL#` i#))
         | otherwise            = I24# (x# `iShiftRA#` negateInt# i#)
-    (I24# x#) `rotate` (I# i#)
+    (I24# x#) `rotate` i@(I# i#)
         | i'# ==# 0# 
         = I24# x#
         | otherwise
@@ -143,7 +143,7 @@ instance Bits Int24 where
                                          (int2Word# x'# `uncheckedShiftRL#` (24# -# i'#)))))
         where
         x'# = narrow24Int# x#
-        i'# = word2Int# (int2Word# i# `and#` int2Word# 15#)
+        I# i'# = i `mod` 24
     bitSize  _                 = 24
     isSigned _                 = True
 
