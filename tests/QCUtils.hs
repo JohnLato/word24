@@ -38,3 +38,10 @@ instance Arbitrary Word16 where
 
 instance CoArbitrary Word16 where
   coarbitrary = coarbitraryIntegral
+
+instance Arbitrary Word32 where
+  arbitrary = arbitraryBoundedIntegral
+  shrink = shrinkIntegral
+
+instance CoArbitrary Word32 where
+  coarbitrary = coarbitraryIntegral
