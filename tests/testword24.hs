@@ -3,13 +3,14 @@ import Prelude as P
 import Test.Framework (defaultMain, testGroup)
 import Test.Framework.Providers.QuickCheck2 (testProperty)
 
-import Test.QuickCheck
+import Test.QuickCheck hiding ((.&.))
 
 import QCUtils
 import Data.Int
 import Data.Int.Int24
 import Data.Word
 import Data.Word.Word24
+import Data.Bits
 import GHC.Real
 
 -- ----------------------------------------
@@ -54,35 +55,65 @@ prop_enum1 a = a < maxBound ==> succ a == a + 1
 prop_enum2 a = a > minBound ==> pred a == a - 1
   where types = a :: Word24
 
-prop_enum3 a = a >= 0 && a < fromIntegral (maxBound :: Word24) ==>
-               toEnum a == fromIntegral a
+prop_enum3 a = let a' = abs a in
+               toEnum a' == fromIntegral a'
   where types = a :: Int
 
 prop_enum4 a = a < maxBound ==> take 2 (enumFrom a) == [a, a+1]
   where types = a :: Word24
 
-prop_enum5 a b = let a' = min a b
-                     b' = max a b in
-                 b' - a' <= 200000 ==> enumFromTo a' b' ==
-                 map fromIntegral (enumFromTo (fromIntegral a' :: Integer)
-                                              (fromIntegral b' :: Integer))
+prop_enum5 a b = let b' = fromIntegral b in
+                 enumFromTo a (a + b') ==
+                 map fromIntegral (enumFromTo (fromIntegral a :: Integer)
+                                             (fromIntegral (a + b') :: Integer))
+  where types = (a :: Word24, b :: Word8)
+
+prop_enum6 a b = take 2 (enumFromThen a b) == [a,b]
   where types = (a :: Word24, b :: Word24)
 
-prop_enum6 a b = fromIntegral a < (maxBound :: Word24) && b < 10 ==>
-  take 5 (enumFromThen a b) == map fromIntegral (take 5 (enumFromThen (fromIntegral a :: Word24) (fromIntegral b :: Word24)))
-  where types = (a :: Word32, b :: Word32)
+prop_quot a b =
+  quot a b == fromIntegral (quot (fromIntegral a :: Word32) (fromIntegral b :: Word32))
+  where types = a :: Word24
 
-prop_quot a b = a <= fromIntegral (maxBound :: Word24) && b <= fromIntegral (maxBound :: Word24) ==>
-  quot a b == fromIntegral (quot (fromIntegral a :: Word24) (fromIntegral b :: Word24))
-  where types = a :: Word32
+prop_rem a b = 
+  rem a b == fromIntegral (rem (fromIntegral a :: Word32) (fromIntegral b :: Word32))
+  where types = a :: Word24
 
-prop_rem a b = a <= fromIntegral (maxBound :: Word24) && b <= fromIntegral (maxBound :: Word24) ==>
-  rem a b == fromIntegral (rem (fromIntegral a :: Word24) (fromIntegral b :: Word24))
-  where types = a :: Word32
+prop_div a b = 
+  div a b == fromIntegral (div (fromIntegral a :: Word32) (fromIntegral b :: Word32))
+  where types = a :: Word24
 
-prop_div a b = a <= fromIntegral (maxBound :: Word24) && b <= fromIntegral (maxBound :: Word24) ==>
-  div a b == fromIntegral (div (fromIntegral a :: Word24) (fromIntegral b :: Word24))
-  where types = a :: Word32
+prop_mod a b = 
+  mod a b == fromIntegral (mod (fromIntegral a :: Word32) (fromIntegral b :: Word32))
+  where types = a :: Word24
+
+prop_quotrem a b = let (j, k) = quotRem a b in
+  a == (b * j) + k
+  where types = (a :: Word24, b :: Word24)
+
+prop_and a b = (a .&. b) == fromIntegral ( (fromIntegral a :: Word24) .&. (fromIntegral b :: Word24))
+  where types = (a :: Word16, b :: Word16)
+
+prop_or a b = (a .|. b) == fromIntegral ( (fromIntegral a :: Word24) .|. (fromIntegral b :: Word24))
+  where types = (a :: Word16, b :: Word16)
+
+prop_xor a b = (a `xor` b) == fromIntegral ( (fromIntegral a :: Word24) `xor` (fromIntegral b :: Word24))
+  where types = (a :: Word16, b :: Word16)
+
+prop_xor_ident a b = (a `xor` b) `xor` b == a
+  where types = (a :: Word24, b :: Word24)
+
+prop_shiftL a = a `shiftL` 1 == a * 2
+  where types = a :: Word24
+
+prop_shiftL_ident a = a `shiftL` 0 == a
+  where types = a :: Word24
+
+prop_rotate a b = (a `rotate` b) `rotate` (negate b) == a
+  where types = (a :: Word24, b :: Int)
+
+prop_comp a = complement (complement a) == a
+  where types = a :: Word24
 
 
 -- ----------------------------------------
@@ -111,15 +142,29 @@ tests = [
     ,testProperty "absolute value" prop_abs
     ,testProperty "signum" prop_signum
     ,testProperty "Real identity" prop_real
-    ,testProperty "enum succ" prop_enum1
+    ,testProperty "quot" prop_quot
+    ,testProperty "rem" prop_rem
+    ,testProperty "div" prop_div
+    ,testProperty "mod" prop_mod
+    ,testProperty "quotRem" prop_quotrem
+    ]
+  ,testGroup "Word24 Enum instance" [
+    testProperty "enum succ" prop_enum1
     ,testProperty "enum pred" prop_enum2
     ,testProperty "toEnum" prop_enum3
     ,testProperty "enumFrom " prop_enum4
     ,testProperty "enumFromTo" prop_enum5
     ,testProperty "enumFromThen" prop_enum6
-    ,testProperty "quot" prop_quot
-    ,testProperty "rem" prop_rem
-    ,testProperty "div" prop_div
+    ]
+  ,testGroup "Word24 binary instance" [
+    testProperty "binary and" prop_and
+    ,testProperty "binary or" prop_or
+    ,testProperty "binary xor" prop_xor
+    ,testProperty "binary xor identity" prop_xor_ident
+    ,testProperty "binary shiftL" prop_shiftL
+    ,testProperty "binary shiftL identity" prop_shiftL_ident
+    ,testProperty "binary rotate" prop_rotate
+    ,testProperty "binary complement" prop_comp
     ]
   ,testGroup "Int24" [
     testProperty "add. identity" prop_addIdentI
