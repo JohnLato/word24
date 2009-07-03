@@ -117,7 +117,7 @@ instance Bits Word24 where
   (W24# x#) `shift` (I# i#)
     | i# >=# 0#             = W24# (narrow24Word# (x# `shiftL#` i#))
     | otherwise             = W24# (x# `shiftRL#` negateInt# i#)
-  (W24# x#) `rotate` i@(I# i#)
+  (W24# x#) `rotate` i
     | i'# ==# 0# = W24# x#
     | otherwise  = W24# (narrow24Word# ((x# `uncheckedShiftL#` i'#) `or#`
                                         (x# `uncheckedShiftRL#` (24# -# i'#))))
