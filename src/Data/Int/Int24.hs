@@ -30,7 +30,7 @@ import GHC.Num
 import GHC.Real
 import GHC.Read
 import GHC.Arr
-import GHC.Word hiding (uncheckedShiftL64#, uncheckedShiftRL64#)
+import GHC.Word
 import GHC.Int
 import GHC.Show
 import GHC.Ptr
@@ -46,10 +46,15 @@ data Int24 = I24# Int# deriving (Eq, Ord)
 -- ^ 24-bit signed integer type
 
 -- the narrowings are primops in GHC; I don't have that luxury.
+-- if the 24th bit (from right) is on, the value is negative, so
+-- fill the uppermost bits with 1s.  Otherwise clear them to 0s.
 narrow24Int# :: Int# -> Int#
-narrow24Int# x# = if int2Word# x# `gtWord#` int2Word# 0x007FFFFF#
-  then word2Int# ( int2Word# x# `or#` int2Word# 0xFF800000# )
-  else x#
+narrow24Int# x# = if (x'# `and#` mask#) `eqWord#` mask#
+  then word2Int# ( x'# `or#` int2Word# 0xFF800000# )
+  else word2Int# ( x'# `and#` (int2Word# 0xFFFFFF#))
+  where
+  x'# = int2Word# x#
+  mask# = int2Word# 0x00800000#
 
 instance Show Int24 where
     showsPrec p x = showsPrec p (fromIntegral x :: Int)
@@ -136,14 +141,14 @@ instance Bits Int24 where
         | i# >=# 0#            = I24# (narrow24Int# (x# `iShiftL#` i#))
         | otherwise            = I24# (x# `iShiftRA#` negateInt# i#)
     (I24# x#) `rotate` i
-        | i'# ==# 0# 
-        = I24# x#
+        | i'# ==# 0#           = I24# x#
         | otherwise
-        = I24# (narrow24Int# (word2Int# ((int2Word# x'# `uncheckedShiftL#` i'#) `or#`
-                                         (int2Word# x'# `uncheckedShiftRL#` (24# -# i'#)))))
+        = I24# (narrow24Int# (word2Int# ((x'# `uncheckedShiftL#` i'#) `or#`
+                                         (x'# `uncheckedShiftRL#` (24# -# i'#)))))
         where
-        x'# = narrow24Int# x#
-        I# i'# = i `mod` 24
+        x'# = narrow24Word# (int2Word# x#)
+        I# i0#    = i `mod` 24
+        i'# = word2Int# (narrow24Word# (int2Word# i0#))
     bitSize  _                 = 24
     isSigned _                 = True
 

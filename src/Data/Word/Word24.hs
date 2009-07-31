@@ -14,6 +14,7 @@
 -- #hide
 module Data.Word.Word24 (
   Word24(..)
+  ,narrow24Word#
   )
 
 where
