@@ -8,7 +8,7 @@ maintainer:	John W. Lato, jwlato@gmail.com
 license:	BSD3
 license-file:	LICENSE
 homepage:       http://inmachina.net/~jwlato/haskell/word24
-tested-with:    GHC == 6.10.3
+tested-with:    GHC == 6.10.4, GHC == 6.10.3
 stability:	experimental
 
 cabal-version:  >= 1.2
@@ -43,7 +43,9 @@ library
    Data.Int.Int24
    Data.Word.Word24
 
- ghc-options:           -O2 -Wall
+ ghc-options:   -O2 -Wall
+ if impl(ghc >= 6.8)
+   ghc-options: -fwarn-tabs
 
 executable test24
   hs-source-dirs:
@@ -52,7 +54,8 @@ executable test24
 
   main-is: testword24.hs
 
-  other-modules: QCUtils
+  other-modules:
+    QCUtils
 
   if flag(buildTests)
     build-depends:
