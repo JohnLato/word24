@@ -1,5 +1,4 @@
 {-# LANGUAGE MagicHash #-}
-{-# OPTIONS_HADDOCK hide #-}
 
 -- |
 -- Module      : Data.Word.Word24
@@ -7,7 +6,7 @@
 -- Stability   : experimental
 -- Portability : non-portable (GHC Extensions)
 
--- Provide a three-byte unsigned integral type: 'Word24', analagous to Word8,
+-- Provide a 24-bit unsigned integral type: 'Word24', analagous to Word8,
 -- Word16, etc.
 -- 
 

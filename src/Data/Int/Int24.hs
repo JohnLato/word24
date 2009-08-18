@@ -1,5 +1,5 @@
 {-# LANGUAGE MagicHash, NoImplicitPrelude #-}
-{-# OPTIONS_HADDOCK hide #-}
+
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Int.Int24
@@ -9,7 +9,7 @@
 -- Stability   :  experimental
 -- Portability :  non-portable (GHC Extensions)
 --
--- The 3 bit integral datatypes, 'Int24'.
+-- The 24 bit integral datatype, 'Int24'.
 --
 -----------------------------------------------------------------------------
 
