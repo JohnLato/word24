@@ -47,7 +47,7 @@ library
  if impl(ghc >= 6.8)
    ghc-options: -fwarn-tabs
 
-executable test24
+executable testWord24
   hs-source-dirs:
     src
     tests
