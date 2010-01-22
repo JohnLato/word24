@@ -34,6 +34,7 @@ import GHC.Word
 import GHC.Int
 import GHC.Show
 import GHC.Ptr
+import GHC.Err
 
 ------------------------------------------------------------------------
 -- type Int24
@@ -53,8 +54,8 @@ narrow24Int# x# = if (x'# `and#` mask#) `eqWord#` mask#
   then word2Int# ( x'# `or#` int2Word# 0xFF800000# )
   else word2Int# ( x'# `and#` (int2Word# 0xFFFFFF#))
   where
-  x'# = int2Word# x#
-  mask# = int2Word# 0x00800000#
+    !x'# = int2Word# x#
+    !mask# = int2Word# 0x00800000#
 
 instance Show Int24 where
     showsPrec p x = showsPrec p (fromIntegral x :: Int)
@@ -146,9 +147,9 @@ instance Bits Int24 where
         = I24# (narrow24Int# (word2Int# ((x'# `uncheckedShiftL#` i'#) `or#`
                                          (x'# `uncheckedShiftRL#` (24# -# i'#)))))
         where
-        x'# = narrow24Word# (int2Word# x#)
-        I# i0#    = i `mod` 24
-        i'# = word2Int# (narrow24Word# (int2Word# i0#))
+          !x'# = narrow24Word# (int2Word# x#)
+          !(I# i0#)    = i `mod` 24
+          !i'# = word2Int# (narrow24Word# (int2Word# i0#))
     bitSize  _                 = 24
     isSigned _                 = True
 

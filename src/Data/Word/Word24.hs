@@ -25,11 +25,10 @@ import GHC.Base
 import GHC.Enum
 import GHC.Num
 import GHC.Real
-import GHC.Read
 import GHC.Arr
-import GHC.Show
 import GHC.Word
 import GHC.Ptr
+import GHC.Err
 
 -- Word24 is represented in the same way as Word.  Operations may assume and
 -- must ensure that it holds only values in its logical range.
@@ -113,7 +112,7 @@ instance Bits Word24 where
   (W24# x#) .&.   (W24# y#) = W24# (x# `and#` y#)
   (W24# x#) .|.   (W24# y#) = W24# (x# `or#` y#)
   (W24# x#) `xor` (W24# y#) = W24# (x# `xor#` y#)
-  complement (W24# x#)      = W24# (x# `xor#` mb#) where W24# mb# = maxBound
+  complement (W24# x#)      = W24# (x# `xor#` mb#) where !(W24# mb#) = maxBound
   (W24# x#) `shift` (I# i#)
     | i# >=# 0#             = W24# (narrow24Word# (x# `shiftL#` i#))
     | otherwise             = W24# (x# `shiftRL#` negateInt# i#)
@@ -122,7 +121,7 @@ instance Bits Word24 where
     | otherwise  = W24# (narrow24Word# ((x# `uncheckedShiftL#` i'#) `or#`
                                         (x# `uncheckedShiftRL#` (24# -# i'#))))
     where
-    I# i'# = i `mod` 24
+      !(I# i'#) = i `mod` 24
   bitSize _                 = 24
   isSigned _                = False
 
