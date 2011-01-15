@@ -1,4 +1,4 @@
-{-# LANGUAGE MagicHash, NoImplicitPrelude #-}
+{-# LANGUAGE MagicHash, NoImplicitPrelude, BangPatterns #-}
 
 -----------------------------------------------------------------------------
 -- |

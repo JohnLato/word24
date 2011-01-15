@@ -1,4 +1,4 @@
-{-# LANGUAGE MagicHash #-}
+{-# LANGUAGE MagicHash, BangPatterns #-}
 
 -- |
 -- Module      : Data.Word.Word24
@@ -147,7 +147,7 @@ readWord24OffPtr p = do
       w2' = (fromIntegral :: (Word8 -> Word24)) w2
       w3' = (fromIntegral :: (Word8 -> Word24)) w3
       w = w1' .|. (w2' `shiftL` 8) .|. (w3' `shiftL` 16)
-  return $ fromIntegral w
+  return w
 
 writeWord24ToPtr :: Ptr Word24 -> Word24 -> IO ()
 writeWord24ToPtr p v = do
