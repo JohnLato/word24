@@ -7,7 +7,7 @@ author:		John W. Lato, jwlato@gmail.com
 maintainer:	John W. Lato, jwlato@gmail.com
 license:	BSD3
 license-file:	LICENSE
-homepage:       http://inmachina.net/~jwlato/haskell/word24
+homepage:       http://jwlato.webfactional.com/haskell/word24
 tested-with:    GHC == 6.12.1, GHC == 6.10.4
 stability:	experimental
 
