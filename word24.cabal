@@ -7,8 +7,8 @@ author:		John W. Lato, jwlato@gmail.com
 maintainer:	John W. Lato, jwlato@gmail.com
 license:	BSD3
 license-file:	LICENSE
-homepage:       http://jwlato.webfactional.com/haskell/word24
-tested-with:    GHC == 6.12.1, GHC == 6.10.4
+homepage:       http://www.tiresiaspress.us/haskell/word24
+tested-with:    GHC == 6.12.3, GHC == 7.0.3
 stability:	experimental
 
 cabal-version:  >= 1.6
@@ -72,4 +72,4 @@ executable testWord24
 
 source-repository head
   type:     darcs
-  location: http://inmachina.net/~jwlato/haskell/word24
+  location: http://www.tiresiaspress.us/haskell/word24
