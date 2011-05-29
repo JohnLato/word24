@@ -51,11 +51,13 @@ data Int24 = I24# Int# deriving (Eq, Ord)
 -- fill the uppermost bits with 1s.  Otherwise clear them to 0s.
 narrow24Int# :: Int# -> Int#
 narrow24Int# x# = if (x'# `and#` mask#) `eqWord#` mask#
-  then word2Int# ( x'# `or#` int2Word# 0xFF800000# )
-  else word2Int# ( x'# `and#` (int2Word# 0xFFFFFF#))
+  then word2Int# ( x'# `or#` int2Word# m1# )
+  else word2Int# ( x'# `and#` (int2Word# m2#))
   where
-    !x'# = int2Word# x#
+    !x'#   = int2Word# x#
     !mask# = int2Word# 0x00800000#
+    !(I# m1#) = -8388608
+    !(I# m2#) = 16777215
 
 instance Show Int24 where
     showsPrec p x = showsPrec p (fromIntegral x :: Int)
