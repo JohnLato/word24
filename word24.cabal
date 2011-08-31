@@ -8,8 +8,8 @@ maintainer:	John W. Lato, jwlato@gmail.com
 license:	BSD3
 license-file:	LICENSE
 homepage:       http://www.tiresiaspress.us/haskell/word24
-tested-with:    GHC == 6.12.3, GHC == 7.0.3
-stability:	experimental
+tested-with:    GHC == 6.12.3, GHC == 7.0.4
+stability:	stable
 
 cabal-version:  >= 1.6
 build-type:     Simple
@@ -17,9 +17,6 @@ build-type:     Simple
 extra-source-files:
   README
   LICENSE
-
-flag splitBase
-  description: Use the new split-up base package.
 
 flag buildTests
   description: Build test executables.
@@ -29,15 +26,8 @@ library
  hs-source-dirs:
    src
 
- if flag(splitBase)
-   build-depends:
-     base >= 3 && < 5
- else
-   build-depends:
-     base < 3
-
  build-depends:
-   haskell98
+   base >= 3 && < 5
 
  exposed-modules:
    Data.Int.Int24
@@ -65,10 +55,7 @@ executable testWord24
   else
     buildable:  False
 
-  if flag(splitBase)
-    build-depends:  base >= 3 && < 5
-  else
-    build-depends:  base < 3
+  build-depends:  base >= 3 && < 5
 
 source-repository head
   type:     darcs
