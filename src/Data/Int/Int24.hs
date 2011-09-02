@@ -1,4 +1,4 @@
-{-# LANGUAGE MagicHash, NoImplicitPrelude, BangPatterns #-}
+{-# LANGUAGE MagicHash, NoImplicitPrelude, BangPatterns, CPP #-}
 
 -----------------------------------------------------------------------------
 -- |
@@ -36,6 +36,14 @@ import GHC.Show
 import GHC.Ptr
 import GHC.Err
 
+#if __GLASGOW_HASKELL__ >= 702
+#define TOINT integerToInt
+#else
+#define TOINT toInt#
+#endif
+
+ghcver = __GLASGOW_HASKELL__
+
 ------------------------------------------------------------------------
 -- type Int24
 ------------------------------------------------------------------------
@@ -72,7 +80,7 @@ instance Num Int24 where
     signum x | x > 0       = 1
     signum 0               = 0
     signum _               = -1
-    fromInteger i          = I24# (narrow24Int# (toInt# i))
+    fromInteger i          = I24# (narrow24Int# (TOINT i))
 
 instance Real Int24 where
     toRational x = toInteger x % 1
