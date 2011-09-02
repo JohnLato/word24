@@ -1,5 +1,5 @@
 name:		word24
-version:        1.0.1
+version:        1.0.2
 synopsis:       24-bit word and int types for GHC
 description:	24-bit Word and Int data types.
 category:       Data
@@ -8,7 +8,7 @@ maintainer:	John W. Lato, jwlato@gmail.com
 license:	BSD3
 license-file:	LICENSE
 homepage:       http://www.tiresiaspress.us/haskell/word24
-tested-with:    GHC == 6.12.3, GHC == 7.0.4
+tested-with:    GHC == 6.12.3, GHC == 7.0.4, GHC == 7.2.1
 stability:	stable
 
 cabal-version:  >= 1.6
