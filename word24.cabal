@@ -58,5 +58,5 @@ executable testWord24
   build-depends:  base >= 3 && < 5
 
 source-repository head
-  type:     darcs
-  location: http://www.tiresiaspress.us/haskell/word24
+  type:     git
+  location: git@github.com:JohnLato/word24.git
