@@ -33,7 +33,7 @@ library
    Data.Int.Int24
    Data.Word.Word24
 
- ghc-options:   -O2 -Wall
+ ghc-options:   -Wall
  if impl(ghc >= 6.8)
    ghc-options: -fwarn-tabs
 
