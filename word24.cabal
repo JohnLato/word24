@@ -11,20 +11,16 @@ homepage:       http://www.tiresiaspress.us/haskell/word24
 tested-with:    GHC == 7.0.4, GHC == 7.2.1, GHC == 7.4.2
 stability:	stable
 
-cabal-version:  >= 1.6
+cabal-version:  >= 1.10
 build-type:     Simple
 
 extra-source-files:
   README
   LICENSE
 
-flag buildTests
-  description: Build test executables.
-  default:     False
-
 library
- hs-source-dirs:
-   src
+ default-language: Haskell2010
+ hs-source-dirs: src
 
  build-depends:
    base >= 3 && < 5
@@ -37,25 +33,19 @@ library
  if impl(ghc >= 6.8)
    ghc-options: -fwarn-tabs
 
-executable testWord24
-  hs-source-dirs:
-    src
-    tests
-
+Test-Suite test
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
   main-is: testword24.hs
+  hs-source-dirs: tests src
+  ghc-options:    -fhpc -hpcdir dist/hpc/mix/word24-1.0.3
 
-  other-modules:
-    QCUtils
-
-  if flag(buildTests)
-    build-depends:
-      QuickCheck                 >= 2 && < 3,
-      test-framework             >= 0.2 && < 0.3,
-      test-framework-quickcheck2 >= 0.2 && < 0.3
-  else
-    buildable:  False
-
-  build-depends:  base >= 3 && < 5
+  build-depends:
+    base,
+    word24,
+    QuickCheck                 >= 2 && < 3,
+    test-framework             >= 0.2 && < 0.7,
+    test-framework-quickcheck2 >= 0.2 && < 0.7
 
 source-repository head
   type:     git
