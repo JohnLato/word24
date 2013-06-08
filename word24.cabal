@@ -47,6 +47,19 @@ Test-Suite test
     test-framework             >= 0.2 && < 0.7,
     test-framework-quickcheck2 >= 0.2 && < 0.7
 
+benchmark bench24
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  hs-source-dirs: bench
+  main-is:        Benchmark.hs
+
+  build-depends:
+      base,
+      word24,
+      criterion  >= 0.6 && < 0.9,
+      deepseq    >= 1.2 && < 2
+  ghc-options: -O2
+
 source-repository head
   type:     git
   location: git@github.com:JohnLato/word24.git
