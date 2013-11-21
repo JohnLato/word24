@@ -133,8 +133,12 @@ prop_rotate a b = (a `rotate` b) `rotate` (negate b) == a
 prop_comp a = complement (complement a) == a
   where types = a :: Word24
 
-prop_bit_ident q (NonNegative j) k =
-    testBit (bit j `asTypeOf` q) k == (j == k)
+prop_bit_ident q (NonNegative j) = testBit (bit j `asTypeOf` q) j == (j < 24)
+
+prop_popCount s t a = if a >= 0
+  then popCount (a `asTypeOf` s) == popCount (fromIntegral a `asTypeOf` t)
+  else
+    bitSize s - popCount (a `asTypeOf` s) == bitSize t - popCount (fromIntegral a `asTypeOf` t)
 
 -- Word Storable properties
 prop_sizeOf a = sizeOf a == 3
@@ -312,6 +316,7 @@ tests = [
     ,testProperty "binary rotate" prop_rotate
     ,testProperty "binary complement" prop_comp
     ,testProperty "bit/testBit" (prop_bit_ident (0::Word24))
+    ,testProperty "popCount"    (prop_popCount (0::Word24) (0::Word))
     ]
   ,testGroup "Storable instance" [
     testProperty  "sizeOf Word24" prop_sizeOf
@@ -359,6 +364,7 @@ tests = [
     ,testProperty "binary rotate" prop_rotateI
     ,testProperty "binary complement" prop_compI
     ,testProperty "bit/testBit" (prop_bit_ident (0::Int24))
+    ,testProperty "popCount"    (prop_popCount (0::Int24) (0::Int))
     ]
   ,testGroup "Storable instance" [
     testProperty  "sizeOf Int24" prop_sizeOfI
