@@ -133,6 +133,9 @@ prop_rotate a b = (a `rotate` b) `rotate` (negate b) == a
 prop_comp a = complement (complement a) == a
   where types = a :: Word24
 
+prop_bit_ident q (NonNegative j) k =
+    testBit (bit j `asTypeOf` q) k == (j == k)
+
 -- Word Storable properties
 prop_sizeOf a = sizeOf a == 3
   where types = a :: Word24
@@ -267,7 +270,8 @@ prop_alignI a = alignment a == 3
 -- ----------------------------------------
 -- tests
 tests = [
-  testGroup "Word24" [
+ testGroup "Word24"
+  [ testGroup "basic" [
     testProperty "add. identity" prop_addIdent
     ,testProperty "mult. identity" prop_multIdent
     ,testProperty "unsigned" prop_unsigned
@@ -280,7 +284,7 @@ tests = [
     ,testProperty "signum" prop_signum
     ,testProperty "Real identity" prop_real
     ]
-  ,testGroup "Word24 Integral instance" [
+  ,testGroup "Integral instance" [
     testProperty  "quot" prop_quot
     ,testProperty "rem" prop_rem
     ,testProperty "div" prop_div
@@ -288,7 +292,7 @@ tests = [
     ,testProperty "quotRem" prop_quotrem
     ,testProperty "divmod" prop_divmod
     ]
-  ,testGroup "Word24 Enum instance" [
+  ,testGroup "Enum instance" [
     testProperty "enum succ" prop_enum1
     ,testProperty "enum pred" prop_enum2
     ,testProperty "toEnum" prop_enum3
@@ -296,7 +300,7 @@ tests = [
     ,testProperty "enumFromTo" prop_enum5
     ,testProperty "enumFromThen" prop_enum6
     ]
-  ,testGroup "Word24 binary instance" [
+  ,testGroup "Bits instance" [
     testProperty "binary and" prop_and
     ,testProperty "binary or" prop_or
     ,testProperty "binary xor" prop_xor
@@ -307,12 +311,15 @@ tests = [
     ,testProperty "binary shiftR" prop_shiftR2
     ,testProperty "binary rotate" prop_rotate
     ,testProperty "binary complement" prop_comp
+    ,testProperty "bit/testBit" (prop_bit_ident (0::Word24))
     ]
-  ,testGroup "Word24 Storable instance" [
+  ,testGroup "Storable instance" [
     testProperty  "sizeOf Word24" prop_sizeOf
     ,testProperty "aligntment" prop_align
     ]
-  ,testGroup "Int24" [
+  ]
+ ,testGroup "Int24"
+  [testGroup "basic" [
     testProperty "add. identity" prop_addIdentI
     ,testProperty "mult. identity" prop_multIdentI
     ,testProperty "Int16/Int24 conversion" prop_smallerI
@@ -324,7 +331,7 @@ tests = [
     ,testProperty "signum" prop_signumI
     ,testProperty "Real identity" prop_realI
     ]
-  ,testGroup "Int24 Integral instance" [
+  ,testGroup "Integral instance" [
     testProperty  "quot" prop_quotI
     ,testProperty "rem" prop_remI
     ,testProperty "div" prop_divI
@@ -332,7 +339,7 @@ tests = [
     ,testProperty "quotRem" prop_quotremI
     ,testProperty "divmod" prop_divmodI
     ]
-  ,testGroup "Int24 Enum instance" [
+  ,testGroup "Enum instance" [
     testProperty "enum succ" prop_enum1I
     ,testProperty "enum pred" prop_enum2I
     ,testProperty "toEnum" prop_enum3I
@@ -340,7 +347,7 @@ tests = [
     ,testProperty "enumFromTo" prop_enum5I
     ,testProperty "enumFromThen" prop_enum6I
     ]
-  ,testGroup "Int24 binary instance" [
+  ,testGroup "Bits instance" [
     testProperty "binary and" prop_andI
     ,testProperty "binary or" prop_orI
     ,testProperty "binary xor" prop_xorI
@@ -351,12 +358,14 @@ tests = [
     ,testProperty "binary shiftR" prop_shiftR2I
     ,testProperty "binary rotate" prop_rotateI
     ,testProperty "binary complement" prop_compI
+    ,testProperty "bit/testBit" (prop_bit_ident (0::Int24))
     ]
-  ,testGroup "Int24 Storable instance" [
+  ,testGroup "Storable instance" [
     testProperty  "sizeOf Int24" prop_sizeOfI
     ,testProperty "aligntment" prop_alignI
     ]
   ]
+ ]
 
 -- ----------------------------------------
 -- entry point
