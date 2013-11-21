@@ -1,5 +1,5 @@
 name:		word24
-version:        1.0.4
+version:        1.0.5
 synopsis:       24-bit word and int types for GHC
 description:	24-bit Word and Int data types.
 category:       Data
@@ -38,7 +38,7 @@ Test-Suite test
   type: exitcode-stdio-1.0
   main-is: testword24.hs
   hs-source-dirs: tests src
-  ghc-options:    -fhpc -hpcdir dist/hpc/mix/word24-1.0.4
+  ghc-options:    -fhpc -hpcdir dist/hpc/mix/word24-1.0.5
 
   build-depends:
     base,
