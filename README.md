@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/JohnLato/word24.png?branch=master)](http://travis-ci.org/JohnLato/word24)
+
 This library implements 24-bit word and int types suitable for use in vector
 processing.
 

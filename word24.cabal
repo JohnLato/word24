@@ -15,7 +15,7 @@ cabal-version:  >= 1.10
 build-type:     Simple
 
 extra-source-files:
-  README
+  README.md
   LICENSE
 
 library
