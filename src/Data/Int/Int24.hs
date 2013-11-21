@@ -164,6 +164,9 @@ instance Bits Int24 where
     {-# INLINE shiftR #-}
     -- same as the default definition, but we want it inlined (#2376)
     x `shiftR`  i = x `shift`  (-i)
+    bit      = bitDefault
+    testBit  = testBitDefault
+    popCount = popCountDefault
 
 {-# RULES
 "fromIntegral/Word8->Int24"   fromIntegral = \(W8# x#) -> I24# (word2Int# x#)

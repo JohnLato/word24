@@ -124,6 +124,9 @@ instance Bits Word24 where
       !(I# i'#) = i `mod` 24
   bitSize _                 = 24
   isSigned _                = False
+  bit                       = bitDefault
+  testBit (W24# x) n        = testBit (W32# x) n
+  popCount (W24# x)         = popCount (W32# x)
 
   {-# INLINE shiftR #-}
   x `shiftR` i = x `shift` (-i)
