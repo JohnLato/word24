@@ -124,7 +124,8 @@ instance Bits Word24 where
       !(I# i'#) = i `mod` 24
   bitSize _                 = 24
   isSigned _                = False
-  bit                       = bitDefault
+  bit n                     = case bit n of
+      W32# x -> W24# (narrow24Word# x)
   testBit (W24# x) n        = testBit (W32# x) n
   popCount (W24# x)         = popCount (W32# x)
 

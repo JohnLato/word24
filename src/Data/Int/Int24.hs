@@ -164,7 +164,8 @@ instance Bits Int24 where
     {-# INLINE shiftR #-}
     -- same as the default definition, but we want it inlined (#2376)
     x `shiftR`  i = x `shift`  (-i)
-    bit      = bitDefault
+    bit n                     = case bit n of
+        I32# x -> I24# (narrow24Int# x)
     testBit  = testBitDefault
     popCount = popCountDefault
 
