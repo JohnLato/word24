@@ -166,8 +166,8 @@ instance Bits Int24 where
     x `shiftR`  i = x `shift`  (-i)
     bit n                     = case bit n of
         I32# x -> I24# (narrow24Int# x)
-    testBit  = testBitDefault
-    popCount = popCountDefault
+    testBit x i  = (x .&. bit i) /= 0
+    popCount (I24# x#) = popCount (W# (narrow24Word# (int2Word# x#)))
 
 {-# RULES
 "fromIntegral/Word8->Int24"   fromIntegral = \(W8# x#) -> I24# (word2Int# x#)
