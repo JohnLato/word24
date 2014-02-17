@@ -56,7 +56,7 @@ data Int24 = I24# Int# deriving (Eq, Ord)
 -- if the 24th bit (from right) is on, the value is negative, so
 -- fill the uppermost bits with 1s.  Otherwise clear them to 0s.
 narrow24Int# :: Int# -> Int#
-narrow24Int# x# = if (x'# `and#` mask#) `eqWord#` mask#
+narrow24Int# x# = if primBool ((x'# `and#` mask#) `eqWord#` mask#)
   then word2Int# ( x'# `or#` int2Word# m1# )
   else word2Int# ( x'# `and#` (int2Word# m2#))
   where
@@ -147,10 +147,10 @@ instance Bits Int24 where
     (I24# x#) `xor` (I24# y#)  = I24# (word2Int# (int2Word# x# `xor#` int2Word# y#))
     complement (I24# x#)       = I24# (word2Int# (int2Word# x# `xor#` int2Word# (-1#)))
     (I24# x#) `shift` (I# i#)
-        | i# >=# 0#            = I24# (narrow24Int# (x# `iShiftL#` i#))
-        | otherwise            = I24# (x# `iShiftRA#` negateInt# i#)
+        | primBool (i# >=# 0# )  = I24# (narrow24Int# (x# `iShiftL#` i#))
+        | otherwise              = I24# (x# `iShiftRA#` negateInt# i#)
     (I24# x#) `rotate` i
-        | i'# ==# 0#           = I24# x#
+        | primBool (i'# ==# 0# ) = I24# x#
         | otherwise
         = I24# (narrow24Int# (word2Int# ((x'# `uncheckedShiftL#` i'#) `or#`
                                          (x'# `uncheckedShiftRL#` (24# -# i'#)))))
@@ -184,3 +184,12 @@ instance Storable Int24 where
   alignment _ = 3
   peek p = fmap fromIntegral $ peek ((castPtr p) :: Ptr Word24)
   poke p v = poke (castPtr p :: Ptr Word24) (fromIntegral v)
+
+#if MIN_VERSION_base(4,7,0)
+primBool :: Int# -> Bool
+primBool x = tagToEnum# x
+#else
+primBool :: Bool -> Bool
+primBool = id
+#endif
+

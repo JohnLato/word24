@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE MagicHash, BangPatterns #-}
 
 -- |
@@ -114,10 +115,10 @@ instance Bits Word24 where
   (W24# x#) `xor` (W24# y#) = W24# (x# `xor#` y#)
   complement (W24# x#)      = W24# (x# `xor#` mb#) where !(W24# mb#) = maxBound
   (W24# x#) `shift` (I# i#)
-    | i# >=# 0#             = W24# (narrow24Word# (x# `shiftL#` i#))
+    | primBool (i# >=# 0#)  = W24# (narrow24Word# (x# `shiftL#` i#))
     | otherwise             = W24# (x# `shiftRL#` negateInt# i#)
   (W24# x#) `rotate` i
-    | i'# ==# 0# = W24# x#
+    | primBool (i'# ==# 0#) = W24# x#
     | otherwise  = W24# (narrow24Word# ((x# `uncheckedShiftL#` i'#) `or#`
                                         (x# `uncheckedShiftRL#` (24# -# i'#))))
     where
@@ -131,6 +132,14 @@ instance Bits Word24 where
 
   {-# INLINE shiftR #-}
   x `shiftR` i = x `shift` (-i)
+
+#if MIN_VERSION_base(4,7,0)
+primBool :: Int# -> Bool
+primBool x = tagToEnum# x
+#else
+primBool :: Bool -> Bool
+primBool = id
+#endif
 
 {-# RULES
 "fromIntegral/Word8->Word24"    fromIntegral = \(W8# x#) -> W24# x#
