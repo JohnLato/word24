@@ -38,7 +38,6 @@ Test-Suite test
   type: exitcode-stdio-1.0
   main-is: testword24.hs
   hs-source-dirs: tests src
-  ghc-options:    -fhpc -hpcdir dist/hpc/mix/word24-1.0.6
 
   build-depends:
     base,
